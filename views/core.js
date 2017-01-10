@@ -3,6 +3,16 @@ var myTodo=angular.module('myTodo',[]);
 function mainController($scope,$http){
 	$scope.formData={};
 
+
+	$http.get('/profilepic').success(function(data){
+
+		$scope.photo=data;
+		
+
+	}).error(function(data){
+		console.log('error '+data);
+	});
+
 	$http.get('/todos').success(function(data){
 		$scope.todos=data;
 		console.log(data);

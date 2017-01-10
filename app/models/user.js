@@ -11,10 +11,7 @@ var userSchema=mongoose.Schema({
         token        : String,
         email        : String,
         name         : String
-    },
-    todos:[{
-    	text:String
-    }]
+    }
 });
 
 userSchema.methods.generateHash=function(password){
