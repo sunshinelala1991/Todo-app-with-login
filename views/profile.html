@@ -8,6 +8,36 @@
     <style>
         body        { padding-top:80px; word-wrap:break-word; }
         #todo-list              { margin-bottom:30px; }
+
+
+
+
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+
+
+
+
+
+
+
     </style>
 
      <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
@@ -35,11 +65,24 @@
                 <object data={{"/images/"+photo.address}} type="image/png" style="width:150px;height:150px;">
             <img src="/images/default.png" style="width:150px;height:150px;"/>
           </object>
-              <!-- image upload-->
-        <form action="/profilepic" method="post" enctype="multipart/form-data">
-          <input type="file" name="pic" accept="image/*">
-          <input type="submit">
-        </form>
+             
+        
+             <form action="/profilepic" method="post" enctype="multipart/form-data" >
+                <div class="btn-group" role="group" aria-label="...">
+
+<span class="btn btn-default btn-file">
+Set new profile photo
+        <input type="file" name="file"   onchange="this.form.submit()">
+        </span>
+        </div>
+
+</form>
+
+        
+
+
+
+
         </div>
 <div class="col-md-6">
                     <p>

@@ -13,6 +13,7 @@ function mainController($scope,$http){
 		console.log('error '+data);
 	});
 
+
 	$http.get('/todos').success(function(data){
 		$scope.todos=data;
 		console.log(data);
@@ -53,4 +54,7 @@ function mainController($scope,$http){
 			console.log("error"+data);
 		});
 	};
+
+
 }
+
