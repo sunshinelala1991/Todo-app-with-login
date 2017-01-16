@@ -1,7 +1,13 @@
-var myTodo=angular.module('myTodo',[]);
+var myTodo=angular.module('myTodo',['ngMaterial', 'ngMessages']);
 
-function mainController($scope,$http){
+myTodo.controller("mainController",function($scope,$http){
 	$scope.formData={};
+	$scope.formData.date=new Date();
+
+
+
+
+	
 
 
 	$http.get('/profilepic').success(function(data){
@@ -16,7 +22,7 @@ function mainController($scope,$http){
 
 	$http.get('/todos').success(function(data){
 		$scope.todos=data;
-		console.log(data);
+		//console.log(data);
 	}).error(function(data){
 		console.log('error'+data);
 	});
@@ -25,7 +31,7 @@ function mainController($scope,$http){
 
 	$http.get('/currentuser').success(function(data){
 		$scope.user=data;
-		console.log(data);
+		//console.log(data);
 	}).error(function(data){
 		console.log('error'+data);
 	});
@@ -38,8 +44,9 @@ function mainController($scope,$http){
 	$scope.createTodo=function(){
 		$http.post('/todos',$scope.formData).success(function(data){
 			$scope.formData={};
+			$scope.formData.date=new Date();
 			$scope.todos=data;
-			console.log(data);
+			//console.log(data);
 		}).error(function(data){
 			console.log("error "+data);
 		});
@@ -49,12 +56,15 @@ function mainController($scope,$http){
 	$scope.deleteTodo=function(id){
 		$http.delete('/todos/'+id).success(function(data){
 			$scope.todos=data;
-			console.log(data);
+			//console.log(data);
 		}).error(function(data){
 			console.log("error"+data);
 		});
 	};
 
 
-}
+});
+
+
+
 

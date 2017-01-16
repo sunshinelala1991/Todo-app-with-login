@@ -34,7 +34,7 @@ app.get('/currentuser',isLoggedIn,function(req,res){
 });
 
 app.get('/todos',isLoggedIn,function(req,res){
-    Todo.find({'email':req.user.local.email},function(err,todos){
+    Todo.find({'email':req.user.local.email,'completed':false},function(err,todos){
     	if(err) res.send(err);    	
     	res.json(todos);
     });
@@ -44,10 +44,15 @@ app.get('/todos',isLoggedIn,function(req,res){
 app.post('/todos',isLoggedIn,function(req,res){
 	Todo.create({
 		email:req.user.local.email,
-		text:req.body.text
+		text:req.body.text,
+		date:req.body.date,
+		completed:false
+
 	},function(err,todo){
+
+		
 		if(err) res.send(err);
-		Todo.find({'email':req.user.local.email},function(err,todos){
+		Todo.find({'email':req.user.local.email,'completed':false},function(err,todos){
 			if(err) res.send(err);
 			res.json(todos);
 		});
@@ -55,6 +60,28 @@ app.post('/todos',isLoggedIn,function(req,res){
 });
 
 app.delete('/todos/:todo_id',function(req,res){
+
+
+
+	Todo.update({_id:req.params.todo_id},
+		{
+        $set: { 'completed': true},
+    	},
+    	function(err,todo){
+
+
+    	if(err) res.send(err);
+
+		Todo.find({'email':req.user.local.email,'completed':false},function(err,todos){
+			if(err) res.send(err);
+			res.json(todos);
+		});
+
+    	});
+
+
+
+/*
 	Todo.remove({
 		_id:req.params.todo_id
 	},function(err,todo){
@@ -66,6 +93,10 @@ app.delete('/todos/:todo_id',function(req,res){
 		});
 
 	});
+
+*/
+
+
 });
 
 
