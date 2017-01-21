@@ -93,7 +93,8 @@ app.get('/num_todos',isLoggedIn,function(req,res){
     // Get only records created in the last 30 days
     {$match:{
           "date":{$gt: new Date((new Date()).getTime()- 1000*60*60*24*30) },
-          "completed":true
+          "completed":true,
+          'email':req.user.local.email
     }}, 
     // Get the year, month and day from the createdTimeStamp
     {$project:{
