@@ -65,6 +65,9 @@
 
   <!-- Angular Material Library -->
   <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 </head>
 <body ng-controller="mainController">
 <div class="container">
@@ -113,6 +116,12 @@ Set new profile photo
                         
                     </p>
                     </div>
+<p></p>
+<div id="chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+
+
+
                     </div>
 
 
@@ -209,5 +218,62 @@ Set new profile photo
 
 
 </div>
+<script>
+
+
+$(function () {
+
+     $.getJSON('/num_todos', function (data) {
+        //console.log(data);
+    Highcharts.chart('chart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'The number of todos completed in each day'
+        },
+        
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+                text: 'Date'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'number of todos'
+            },
+            min: 0
+        },
+        tooltip: {
+            headerFormat: '<b>{series.name}</b><br>',
+            pointFormat: '{point.x:%e. %b}: {point.y} '
+        },
+
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            }
+        },
+
+        series: [{
+            name: 'todos',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: data
+        }]
+    });
+});
+});
+</script>
+
+
 </body>
 </html>

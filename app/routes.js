@@ -65,7 +65,8 @@ app.delete('/todos/:todo_id',function(req,res){
 
 	Todo.update({_id:req.params.todo_id},
 		{
-        $set: { 'completed': true},
+        $set: { 'completed': true,
+               'date':new Date()},
     	},
     	function(err,todo){
 
@@ -81,23 +82,52 @@ app.delete('/todos/:todo_id',function(req,res){
 
 
 
-/*
-	Todo.remove({
-		_id:req.params.todo_id
-	},function(err,todo){
-		if(err) res.send(err);
-
-		Todo.find({'email':req.user.local.email},function(err,todos){
-			if(err) res.send(err);
-			res.json(todos);
-		});
-
-	});
-
-*/
-
 
 });
+
+
+app.get('/num_todos',isLoggedIn,function(req,res){
+
+	//console.log(new Date()-1000*60*60*24*30);
+    Todo.aggregate([
+    // Get only records created in the last 30 days
+    {$match:{
+          "date":{$gt: new Date((new Date()).getTime()- 1000*60*60*24*30) },
+          "completed":true
+    }}, 
+    // Get the year, month and day from the createdTimeStamp
+    {$project:{
+          "year":{$year:"$date"}, 
+          "month":{$month:"$date"}, 
+          "day": {$dayOfMonth:"$date"}
+    }}, 
+    // Group by year, month and day and get the count
+    {$group:{
+          _id:{year:"$year", month:"$month", day:"$day"}, 
+          "count":{$sum:1}
+    }}
+],function(err,result){
+	//console.log(result);
+	if(err)
+		res.json(err);
+	else{
+		var nresult=[];
+		result.forEach(function(r){
+			nresult.push([Date.UTC(r['_id']['year'],parseInt(r['_id']['month'])-1,r['_id']['day']),r['count']])
+		});
+
+		
+
+
+		res.json(nresult);
+	}
+});
+});
+
+
+
+
+
 
 
 
